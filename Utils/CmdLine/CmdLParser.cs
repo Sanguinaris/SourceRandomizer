@@ -7,15 +7,6 @@ namespace SourceRandomizer.Utils.cmdLine
 {
     class CmdParser
     {
-        /*  Command Line ARGS:
-         * -d --directory   the directory where the source code will be
-         * -f --file        the (zip) file containing the source code       (when this is set -d will be the extraction folder)
-         * -b --build       cmake | custom  cmake will walk the (first) CMakeLists.txt 
-         * ^^^^^^^^^^ will only implement cmake
-         * -h --help        will call your mom
-         */
-
-
         public static void AddCmdArg(CmdArg arg) { argList.Add(arg); }
 
         /// <summary>

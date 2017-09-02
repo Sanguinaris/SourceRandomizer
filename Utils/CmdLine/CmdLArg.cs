@@ -70,10 +70,6 @@ namespace SourceRandomizer.Utils.cmdLine
         }
         #endregion
 
-        #region Pubs
-
-        #endregion
-
         #region Variables
         private Func<bool> ArgsParsedAction = () => { return true; };
         private List<string> additionArgsList;

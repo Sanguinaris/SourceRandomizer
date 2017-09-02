@@ -9,10 +9,17 @@ namespace SourceRandomizer
 {
     class MainEntry
     {
+
+        /*  Command Line ARGS:
+         * -d --directory   the directory where the source code will be
+         * -f --file        the (zip) file containing the source code       (when this is set -d will be the extraction folder)
+         * -b --build       cmake | custom  cmake will walk the (first) CMakeLists.txt 
+         * ^^^^^^^^^^ will only implement cmake
+         * -h --help        will call your mom
+         */
+
         static void Main(string[] args) //ARGS ARE: 
         {
-            CmdParser.AddCmdArg(new CmdArg("-d", "--directory", "the dir where the sauce is located", 1));
-
             if (!CmdParser.ParseArgs(args))
                 return;
 
