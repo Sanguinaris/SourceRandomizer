@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace SourceRandomizer.Utils.cmdLine
+namespace SourceRandomizer.Utils.CmdLine
 {
     class CmdArg    //Currently deeply flawed as i need to have the list hold refs of the original (static) object
     {
@@ -14,22 +14,23 @@ namespace SourceRandomizer.Utils.cmdLine
             _longCmd = longCmd;
             _description = description;
             _addArgsCnt = addArgsCnt;
-            additionArgsList = new List<string>(addArgsCnt);    //removes 1 il instruction using parameter
+            additionArgsList = new string[addArgsCnt];    //removes 1 il instruction using parameter
             CmdParser.AddCmdArg(this);
         }
         #endregion
 
         #region Getters
-        int GetAdditionalArgCount() { return _addArgsCnt; }
-        string GetShortCommand() { return _shortCmd; }
-        string GetLongCommand() { return _longCmd; }
-        string GetDescription() { return _description; }
-        string GetAdditionalArg(int idx) { return (idx >= additionArgsList.Count) ? "" : additionArgsList[idx]; }
+        public int GetAdditionalArgCount() { return _addArgsCnt; }
+        public string GetShortCommand() { return _shortCmd; }
+        public string GetLongCommand() { return _longCmd; }
+        public string GetDescription() { return _description; }
+        public string GetAdditionalArg(int idx) { return (idx >= _addArgsCnt) ? "" : additionArgsList[idx]; }
+        public bool IsParsed() { return WasParsed; }
         #endregion
 
         #region Setters
-        void SetAdditionalArg(int idx, string str) { if (idx < _addArgsCnt) additionArgsList[idx] = str; }
-        void SetFinishedParsingCllbk(Func<bool> action) { ArgsParsedAction = action; }
+        public void SetAdditionalArg(int idx, string str) { if (idx < _addArgsCnt) additionArgsList[idx] = str; }
+        public void SetFinishedParsingCllbk(Func<CmdArg, bool> action) { ArgsParsedAction = action; }
         #endregion
 
         #region Virtuals
@@ -44,6 +45,7 @@ namespace SourceRandomizer.Utils.cmdLine
                     argList.RemoveAt(i);
                     i--;
                     ParsingStarted = true;
+                    WasParsed = true;
                     continue;
                 }
 
@@ -63,16 +65,21 @@ namespace SourceRandomizer.Utils.cmdLine
                 }
             }
 
-            if (addArgs > 0)    //didnt fill all fields
-                return false;
-
-            return ArgsParsedAction(); //TODO this no gud. lambda need this as arg and way 2 get add args
+            if (ParsingStarted)
+            {
+                if (addArgs > 0)    //didnt fill all fields
+                    return false;
+                return ArgsParsedAction(this);
+            }
+            else
+                return true;
         }
         #endregion
 
         #region Variables
-        private Func<bool> ArgsParsedAction = () => { return true; };
-        private List<string> additionArgsList;
+        private Func<CmdArg,bool> ArgsParsedAction = (cmd) => { return true; };
+        private string[] additionArgsList;
+        private bool WasParsed = false;
         private string _shortCmd, _longCmd, _description;
         private int _addArgsCnt;
         #endregion

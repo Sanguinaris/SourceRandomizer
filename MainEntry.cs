@@ -1,4 +1,4 @@
-﻿using SourceRandomizer.Utils.cmdLine;
+﻿using SourceRandomizer.Utils.CmdLine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,13 +17,15 @@ namespace SourceRandomizer
          * ^^^^^^^^^^ will only implement cmake
          * -h --help        will call your mom
          */
+       
 
         static void Main(string[] args) //ARGS ARE: 
         {
+            CmdParser.Init();
             if (!CmdParser.ParseArgs(args))
                 return;
 
-            //DO SHIT
+            FileInteraction.FileInteraction.DoMutate();
         }
     }
 }
